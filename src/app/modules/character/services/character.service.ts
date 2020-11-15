@@ -1,7 +1,5 @@
-import { Character } from '../../../models/character';
+import { Character } from '../../../models/character-models';
 import { injectable } from 'inversify';
-
-// import characterData = require('../../../../data/characters.json');
 
 // For simplicity, I'm not creating a separate character repository
 
@@ -11,12 +9,16 @@ export interface ICharacterService {
 
 @injectable()
 export class CharacterService implements ICharacterService {
+  private characterData: Character[];
+  constructor() {
+    this.characterData = require('../../../data/characters.json');
+  }
+
   public getByName(name: string): Character {
-    return {
-      name: 'From Char Service: ' + name,
-      currentHp: 11,
-      maxHp: 22,
-      tempHp: 0,
-    };
+    const character = this.characterData.find(
+      ({ name }) => name.toLowerCase === name.toLowerCase
+    );
+
+    return character;
   }
 }

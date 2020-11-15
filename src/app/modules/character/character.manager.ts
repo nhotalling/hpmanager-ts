@@ -1,5 +1,5 @@
 import { inject, injectable } from 'inversify';
-import { Character } from '../../models/character';
+import { Character } from '../../models/character-models';
 import { TYPES } from '../../types';
 import { ICharacterService } from './services/character.service';
 

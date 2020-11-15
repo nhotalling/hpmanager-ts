@@ -1,3 +1,5 @@
+// singleton example
+
 let instance: CharacterHealthRepository = null;
 
 import { CharacterHealth } from '../../models/character-health';

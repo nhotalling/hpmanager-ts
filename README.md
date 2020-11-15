@@ -14,10 +14,6 @@ Open a command prompt from the folder with the Dockerfile
 and run the following commands to build and launch the app:
 
 ```
-ORIG
-docker build -t hpmanager .
-docker run --rm -d -p 8080:80 --name ddbhpmanager hpmanager
-NEW
 docker build -t hpmanager .
 docker run --rm -d -p 8080:8080 --name ctxhpmanager hpmanager
 ```

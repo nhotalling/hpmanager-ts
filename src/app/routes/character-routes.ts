@@ -16,7 +16,7 @@ export class CharacterRoutes {
     app.route('/character/:name').get((req: Request, res: Response) => {
       const name = req.params.name;
       const character = characterManager.getCharacter(name);
-      const status = character == null ? 200 : 404;
+      const status = character == null || character == undefined ? 404 : 200;
       res.status(status).send(character);
     });
   }

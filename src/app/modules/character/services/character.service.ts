@@ -16,7 +16,7 @@ export class CharacterService implements ICharacterService {
 
   public getByName(name: string): Character {
     const character = this.characterData.find(
-      ({ name }) => name.toLowerCase === name.toLowerCase
+      (obj) => obj.name.toLowerCase() === name.toLowerCase()
     );
 
     return character;

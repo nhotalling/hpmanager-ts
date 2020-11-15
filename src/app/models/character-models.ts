@@ -59,3 +59,12 @@ export enum DefenseType {
   Vulnerability = 'vulnerability',
   Immunity = 'immunity',
 }
+
+export enum StatType {
+  Strength = 'strength',
+  Dexterity = 'dexterity',
+  Constitution = 'constitution',
+  Intelligence = 'intelligence',
+  Wisdom = 'wisdom',
+  Charisma = 'charisma',
+}

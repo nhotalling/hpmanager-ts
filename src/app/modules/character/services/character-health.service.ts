@@ -1,6 +1,5 @@
 import { CharacterHealth } from '../../../models/character-health';
-import { inject, injectable } from 'inversify';
-import { TYPES } from '../../../types';
+import { injectable } from 'inversify';
 
 // For simplicity in this demo, I'm not creating a separate character health repository.
 // Ideally, this service would interact with a repository to perform load and save methods.
@@ -15,10 +14,6 @@ export class CharacterHealthService implements ICharacterHealthService {
   private healthDictionary: Map<string, CharacterHealth>;
   constructor() {
     this.healthDictionary = new Map<string, CharacterHealth>();
-    let temp = new CharacterHealth();
-    temp.currentHp = 10;
-    temp.name = 'briv';
-    this.healthDictionary.set('briv', temp);
   }
 
   public getCharacterHealth(name: string): CharacterHealth {

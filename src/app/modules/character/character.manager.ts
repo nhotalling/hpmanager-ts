@@ -31,20 +31,35 @@ export class CharacterManager implements ICharacterManager {
 
   public getCharacter(name: string): Character {
     const character = this.characterService.getByName(name);
-    console.log(character);
-    console.log(character.items[0].modifier.affectedValue);
     return character;
   }
 
   public getStatus(name: string): CharacterHealth {
-    //return this.characterHealthService.getCharacterHealth(name);
-    let health = this.characterHealthService.getCharacterHealth(name);
-    health.currentHp -= 1;
-    this.characterHealthService.save(health);
-    return health;
+    return this.getCharacterHealth(name);
   }
 
-  private name() {}
+  private getCharacterHealth(name: string): CharacterHealth {
+    let currentHealth = this.characterHealthService.getCharacterHealth(name);
+    if (currentHealth != null) {
+      return currentHealth;
+    }
+
+    const character = this.characterService.getByName(name);
+    if (character == null) {
+      return null; // TODO - This could be an exception that turns into a 404
+    }
+
+    var maxHp = this.characterService.calculateMaxHp(character);
+    currentHealth = {
+      name: character.name,
+      maxHp: maxHp,
+      currentHp: maxHp,
+      tempHp: 0,
+    };
+    this.characterHealthService.save(currentHealth);
+
+    return currentHealth;
+  }
 
   public test(): string {
     return 'Character Manager from interface! (docker)';

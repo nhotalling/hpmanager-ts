@@ -1,19 +1,22 @@
 import { inject, injectable } from 'inversify';
-import { Character } from '../../models/character-models';
+import { Character, Defense } from '../../models/character-models';
 import { TYPES } from '../../types';
 import { ICharacterService } from './services/character.service';
 import { ICharacterHealthService } from './services/character-health.service';
 import { CharacterHealth } from '../../models/character-health';
+import { DamageRequest } from '../../models/damage-request';
 
 export interface ICharacterManager {
-  test(): string;
-  //   CharacterHealth AddTempHp(string name, int amount);
-  //   CharacterHealth DealDamage(string name, IEnumerable<DamageRequest> damage);
-  //   int CalculateDamage(IEnumerable<DamageRequest> damageRequest, IEnumerable<Defense> defenses);
-  //   CharacterHealth ApplyDamage(int damage, CharacterHealth originalHealth);
+  addTempHp(name: string, amount: number): CharacterHealth;
+  dealDamage(name: string, damage: Array<DamageRequest>): CharacterHealth;
+  calculateDamage(
+    damageRequest: Array<DamageRequest>,
+    defenses: Array<Defense>
+  ): number;
+  applyDamage(damage: number, originalHealth: CharacterHealth): CharacterHealth;
   getCharacter(name: string): Character;
   getStatus(name: string): CharacterHealth;
-  //   CharacterHealth Heal(string name, int amount);
+  heal(name: string, amount: number): CharacterHealth;
 }
 
 @injectable()
@@ -61,7 +64,39 @@ export class CharacterManager implements ICharacterManager {
     return currentHealth;
   }
 
-  public test(): string {
-    return 'Character Manager from interface! (docker)';
+  addTempHp(name: string, amount: number): CharacterHealth {
+    var health = this.getCharacterHealth(name);
+    let newTempHp = 0;
+
+    if (amount < 0) {
+      // Allowing user to send negative temp hp
+      // as a means to correct an error
+      newTempHp = health.tempHp + amount;
+      newTempHp = Math.max(0, newTempHp);
+    } else {
+      // Temp HP do not stack
+      newTempHp = Math.max(amount, health.tempHp);
+    }
+
+    health.tempHp = newTempHp;
+    this.characterHealthService.save(health);
+
+    return health;
+  }
+
+  dealDamage(name: string, damage: DamageRequest[]): CharacterHealth {
+    throw new Error('Method not implemented.');
+  }
+  calculateDamage(damageRequest: DamageRequest[], defenses: Defense[]): number {
+    throw new Error('Method not implemented.');
+  }
+  applyDamage(
+    damage: number,
+    originalHealth: CharacterHealth
+  ): CharacterHealth {
+    throw new Error('Method not implemented.');
+  }
+  heal(name: string, amount: number): CharacterHealth {
+    throw new Error('Method not implemented.');
   }
 }

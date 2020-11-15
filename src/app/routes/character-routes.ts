@@ -9,10 +9,9 @@ const characterManager = container.get<ICharacterManager>(
 
 export class CharacterRoutes {
   public routes(app: Application): void {
-    app.route('/api/v1/character').get((req: Request, res: Response) => {
-      res.status(200).send({ hello: characterManager.test() + ' interface' });
-    });
-
+    /**
+     * Gets json model for the given character to review its stats and defenses.
+     */
     app.route('/api/v1/character/:name').get((req: Request, res: Response) => {
       const name = req.params.name;
       const character = characterManager.getCharacter(name);
@@ -20,6 +19,9 @@ export class CharacterRoutes {
       res.status(status).send(character);
     });
 
+    /**
+     * Shows a character's current HP, maximum HP, and temporary HP.
+     */
     app
       .route('/api/v1/character/:name/status')
       .get((req: Request, res: Response) => {
@@ -27,6 +29,19 @@ export class CharacterRoutes {
         const health = characterManager.getStatus(name);
         const status = health == null ? 404 : 200;
         res.status(status).send(health);
+      });
+
+    /**
+     * Adds temporary hit points, replacing the old value only if the new value is greater.
+     * May also be used with a negative number to remove temporary HP.
+     */
+    app
+      .route('/api/v1/character/:name/temp')
+      .put((req: Request, res: Response) => {
+        const name = req.params.name;
+        const value = +req.query.value;
+        const health = characterManager.addTempHp(name, value);
+        res.status(200).send(health);
       });
   }
 }

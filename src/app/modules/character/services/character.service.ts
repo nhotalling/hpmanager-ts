@@ -1,6 +1,7 @@
-import { Character, StatType } from '../../../models/character-models';
+import { Character } from '../../../models/character-models';
 import { injectable } from 'inversify';
 import { Calculations } from '../../../shared/calculations';
+import { StatType } from '../../../models/enums';
 
 // For simplicity, I'm not creating a separate character repository
 

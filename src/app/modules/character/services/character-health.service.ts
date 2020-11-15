@@ -23,7 +23,6 @@ export class CharacterHealthService implements ICharacterHealthService {
   }
 
   public save(characterHealth: CharacterHealth): void {
-    console.log(characterHealth);
     if (!characterHealth || !characterHealth.name) {
       throw new RangeError(
         'characterHealth must not be null and must have a valid name'

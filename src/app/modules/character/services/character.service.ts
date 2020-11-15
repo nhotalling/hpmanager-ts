@@ -44,7 +44,6 @@ export class CharacterService implements ICharacterService {
         // For demo purposes, we will assume the first class in the list was the starting class
         isFirstLevel = false;
         hp = charClass.hitDiceValue + conBonus;
-        console.log('first level:' + hp);
         classLevels -= 1;
       }
 

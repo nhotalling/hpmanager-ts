@@ -19,6 +19,6 @@ export class CharacterService implements ICharacterService {
       (obj) => obj.name.toLowerCase() === name.toLowerCase()
     );
 
-    return character;
+    return character ? character : null;
   }
 }

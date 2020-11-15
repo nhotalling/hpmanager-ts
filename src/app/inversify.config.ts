@@ -1,7 +1,10 @@
 import 'reflect-metadata';
 import { Container } from 'inversify';
 import { TYPES } from './types';
-import { CharacterHealthService } from './modules/character/services/character-health.service';
+import {
+  CharacterHealthService,
+  ICharacterHealthService,
+} from './modules/character/services/character-health.service';
 import {
   CharacterService,
   ICharacterService,
@@ -14,7 +17,7 @@ import {
 let container = new Container();
 
 container
-  .bind<CharacterHealthService>(TYPES.CharacterHealthService)
+  .bind<ICharacterHealthService>(TYPES.CharacterHealthService)
   .to(CharacterHealthService)
   .inSingletonScope();
 container

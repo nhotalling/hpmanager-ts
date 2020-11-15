@@ -1,5 +1,3 @@
-import { Stats } from 'fs';
-
 export class Character {
   name: string;
   level: number;

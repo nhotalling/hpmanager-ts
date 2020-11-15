@@ -4,6 +4,7 @@
   "description": "Hit Point Manager",
   "scripts": {
     "build": "tsc",
+    "watch": "nodemon -e ts -w ./src -x npm run dev",
     "dev": "ts-node ./src/app/server.ts",
     "start": "nodemon ./dist/server.js",
     "prod": "npm run build && npm run start",

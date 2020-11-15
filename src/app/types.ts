@@ -1,5 +1,5 @@
 export const TYPES = {
   CharacterHealthService: Symbol('CharacterHealthService'),
-  CharacterRepository: Symbol('CharacterRepository'),
+  CharacterService: Symbol('CharacterService'),
   CharacterManager: Symbol('CharacterManager'),
 };

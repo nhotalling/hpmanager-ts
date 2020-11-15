@@ -3,9 +3,9 @@ import { Container } from 'inversify';
 import { TYPES } from './types';
 import { CharacterHealthService } from './modules/character/services/character-health.service';
 import {
-  CharacterRepository,
-  ICharacterRepository,
-} from './modules/character/services/character.repository';
+  CharacterService,
+  ICharacterService,
+} from './modules/character/services/character.service';
 import {
   CharacterManager,
   ICharacterManager,
@@ -18,12 +18,15 @@ container
   .to(CharacterHealthService)
   .inSingletonScope();
 container
-  .bind<ICharacterRepository>(TYPES.CharacterRepository)
-  .to(CharacterRepository)
+  .bind<ICharacterService>(TYPES.CharacterService)
+  .to(CharacterService)
   .inSingletonScope();
 container
   .bind<ICharacterManager>(TYPES.CharacterManager)
-  .toConstantValue(new CharacterManager());
-//container.bind<string>(TYPES.Token).toConstantValue(process.env.TOKEN);
+  .to(CharacterManager)
+  .inSingletonScope();
+// container
+//   .bind<ICharacterManager>(TYPES.CharacterManager)
+//   .toConstantValue(new CharacterManager());
 
 export default container;

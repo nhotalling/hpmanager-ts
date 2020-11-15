@@ -14,7 +14,10 @@ export class CharacterRoutes {
     });
 
     app.route('/character/:name').get((req: Request, res: Response) => {
-      res.status(200).send({ hello: 'name' });
+      const name = req.params.name;
+      const character = characterManager.getCharacter(name);
+      const status = character == null ? 200 : 404;
+      res.status(status).send(character);
     });
   }
 }

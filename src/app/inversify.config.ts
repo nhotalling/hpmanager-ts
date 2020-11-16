@@ -28,8 +28,5 @@ container
   .bind<ICharacterManager>(TYPES.CharacterManager)
   .to(CharacterManager)
   .inSingletonScope();
-// container
-//   .bind<ICharacterManager>(TYPES.CharacterManager)
-//   .toConstantValue(new CharacterManager());
 
 export default container;

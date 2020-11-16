@@ -5,7 +5,7 @@ calculates its starting hit points (using the rounded-up average method),
 and manages its hit points.
 
 Before building and running the application, you may modify the `characters.json`
-file found in the `DDB.HitPointManager.Data/data` folder.
+file found in the `src/app/data` folder.
 Available characters in the file are `Briv`, `Jonas`, and `Artemis`.
 
 ## Running Hit Point Manager in Docker
@@ -36,8 +36,7 @@ in order to verify the app is running.
 ## Testing the App
 
 The various endpoints are documented below.
-For your convenience, you may import the `DDB.postman_collection.json` file into Postman to use as a starting point.
-You may also browse to `http://localhost:8080/swagger` to view the Swagger docs or test from the web interface.
+For your convenience, you may import the `postman_collection.json` file into Postman to use as a starting point.
 
 Please note that exceptions are surfaced in this demo app. It is assumed they would be handled
 appropriately by the UI in a production environment.
@@ -47,7 +46,7 @@ appropriately by the UI in a production environment.
 `http://localhost:8080/api/v1/character/briv`
 
 Gets json for the given character to review stats and defenses.
-Character name is not case sensitive.
+Character name is case-insensitive.
 
 ### Status - GET
 
@@ -95,8 +94,8 @@ In the example attack above, made with a [Flame Tongue Greatsword](https://www.d
 Other damage notes:
 
 - Negative damage values are ignored.
-- Only standard [Damage Types](https://www.dndbeyond.com/sources/basic-rules/combat#DamageTypes) are allowed (case insensitive)
-- Character defenses are applied in the following order: immunity to the damage type, modifiers (out of scope for this demo), one resistance for the damage type, one vulnerability for the damage type
+- Only standard [Damage Types](https://www.dndbeyond.com/sources/basic-rules/combat#DamageTypes) are allowed (case insensitive).
+- Character defenses are applied in the following order: immunity to the damage type, modifiers (out of scope for this demo), one resistance for the damage type, one vulnerability for the damage type.
 
 ## Misc Notes, Areas for Improvement
 
@@ -107,5 +106,5 @@ Other damage notes:
 - CharacterHealth responses could be improved to include other stats like Status (Alive, Unconscious, Dead),
   death saves, conditions, etc.
 - Damage endpoint could check for excessive damage (character HP max) that causes character death.
-- Add considerations for magic/nonmagic damage
-- Add considerations for defense allowing damage modifiers (eg reduce all damage by 5)
+- Add considerations for magic/nonmagic damage.
+- Add considerations for defense allowing damage modifiers (eg reduce all damage by 5).

@@ -1,0 +1,213 @@
+{
+	"info": {
+		"_postman_id": "aee1875c-b170-43be-9e0d-362834131979",
+		"name": "HP Manager Express",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get Character",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/character/briv",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"character",
+						"briv"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Character Status",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/character/briv/status",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"character",
+						"briv",
+						"status"
+					]
+				},
+				"description": "Expected HP: Briv: 45, Jonas: 23, Artemis: 62"
+			},
+			"response": []
+		},
+		{
+			"name": "Temp HP",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/character/briv/temp?value=6",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"character",
+						"briv",
+						"temp"
+					],
+					"query": [
+						{
+							"key": "value",
+							"value": "6"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Heal",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/character/briv/heal?value=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"character",
+						"briv",
+						"heal"
+					],
+					"query": [
+						{
+							"key": "value",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Damage - Flame Tongue",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[\r\n    {\r\n        \"type\" : \"fire\",\r\n        \"value\" : 6\r\n    },\r\n        {\r\n        \"type\" : \"slashing\",\r\n        \"value\" : 9\r\n    }\r\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/character/briv/damage",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"character",
+						"briv",
+						"damage"
+					]
+				},
+				"description": "Expected damage: Briv: 4"
+			},
+			"response": []
+		},
+		{
+			"name": "Damage - Jonas",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[\r\n    {\r\n        \"type\" : \"radiant\",\r\n        \"value\" : 9\r\n    },\r\n        {\r\n        \"type\" : \"psychic\",\r\n        \"value\" : 2\r\n    }\r\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/character/jonas/damage",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"character",
+						"jonas",
+						"damage"
+					]
+				},
+				"description": "Expected damage: Jonas: 4"
+			},
+			"response": []
+		},
+		{
+			"name": "Damage - Artemis",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[\r\n    {\r\n        \"type\" : \"thunder\",\r\n        \"value\" : 9\r\n    },\r\n    {\r\n        \"type\" : \"poison\",\r\n        \"value\" : 5\r\n    },\r\n        {\r\n        \"type\" : \"necrotic\",\r\n        \"value\" : 5\r\n    }\r\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/character/artemis/damage",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"character",
+						"artemis",
+						"damage"
+					]
+				},
+				"description": "Expected damage: Artemis: 16"
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

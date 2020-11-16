@@ -1,7 +1,15 @@
 import 'reflect-metadata';
 import 'mocha';
-import { anything, capture, instance, mock, verify, when } from 'ts-mockito';
-import { assert } from 'chai';
+import {
+  anyString,
+  anything,
+  capture,
+  instance,
+  mock,
+  verify,
+  when,
+} from 'ts-mockito';
+import { assert, expect } from 'chai';
 import { CharacterService } from '../modules/character/services/character.service';
 import { CharacterHealthService } from '../modules/character/services/character-health.service';
 import { CharacterManager } from '../modules/character/character.manager';
@@ -89,6 +97,74 @@ describe('CharacterManager', () => {
     var result = service.addTempHp('Briv', 9.9);
 
     assert.equal(9, result.tempHp);
+  });
+
+  it('heal increases currentHp', () => {
+    const health: CharacterHealth = {
+      currentHp: 2,
+      maxHp: 25,
+      tempHp: 0,
+      name: 'Briv',
+    };
+
+    when(
+      mockedCharacterHealthServiceClass.getCharacterHealth(anyString())
+    ).thenReturn(health);
+
+    var result = service.heal('Briv', 10);
+
+    assert.equal(12, result.currentHp);
+  });
+
+  it('heal uses ints', () => {
+    const health: CharacterHealth = {
+      currentHp: 2,
+      maxHp: 25,
+      tempHp: 0,
+      name: 'Briv',
+    };
+
+    when(
+      mockedCharacterHealthServiceClass.getCharacterHealth(anyString())
+    ).thenReturn(health);
+
+    var result = service.heal('Briv', 10.999999);
+
+    assert.equal(12, result.currentHp);
+  });
+
+  it('heal does not exceed maxHp', () => {
+    const health: CharacterHealth = {
+      currentHp: 2,
+      maxHp: 25,
+      tempHp: 0,
+      name: 'Briv',
+    };
+
+    when(
+      mockedCharacterHealthServiceClass.getCharacterHealth(anyString())
+    ).thenReturn(health);
+
+    var result = service.heal('Briv', 1000);
+
+    assert.equal(25, result.currentHp);
+  });
+
+  it('heal throws for negative values', () => {
+    const health: CharacterHealth = {
+      currentHp: 2,
+      maxHp: 25,
+      tempHp: 0,
+      name: 'Briv',
+    };
+
+    when(
+      mockedCharacterHealthServiceClass.getCharacterHealth(anyString())
+    ).thenReturn(health);
+
+    expect(() => service.heal('Briv', -10)).to.throw(
+      'Amount healed should be 1 or greater'
+    );
   });
 
   it('calculateDamage applies immunity', () => {

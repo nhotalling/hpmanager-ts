@@ -56,5 +56,17 @@ export class CharacterRoutes {
         const health = characterManager.dealDamage(name, damageRequest);
         res.status(200).send(health);
       });
+
+    /**
+     * Heals hit points up to the character's maximum HP
+     */
+    app
+      .route('/api/v1/character/:name/heal')
+      .put((req: Request, res: Response) => {
+        const name = req.params.name;
+        const value = +req.query.value;
+        const health = characterManager.heal(name, value);
+        res.status(200).send(health);
+      });
   }
 }

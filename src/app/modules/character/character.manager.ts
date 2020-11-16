@@ -291,9 +291,29 @@ export class CharacterManager implements ICharacterManager {
    * @param amount The amount of HP to recover
    */
   heal(name: string, amount: number): CharacterHealth {
-    throw new Error('Method not implemented.');
+    var health = this.getCharacterHealth(name);
+    if (health === null) {
+      // getCharacterHealth must have a matching character or it will return null
+      throw new Error('Character not found');
+    }
+
+    amount = this.getInt(amount);
+    if (amount < 1) {
+      throw new Error('Amount healed should be 1 or greater');
+    }
+
+    // Improvement - disallow healing if character is dead
+    // Could clone here if we don't want to modify the original object
+    health.currentHp = Math.min(amount + health.currentHp, health.maxHp);
+    this.characterHealthService.save(health);
+
+    return health;
   }
 
+  /**
+   * Coerce numeric value into an integer and throw an error if it's not a number.
+   * @param value the value to convert to an integer
+   */
   private getInt(value: number): number {
     const newValue = Math.floor(value);
     if (isNaN(newValue)) {

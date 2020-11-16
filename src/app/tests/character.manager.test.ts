@@ -79,6 +79,18 @@ describe('CharacterManager', () => {
     assert.equal(10, result.tempHp);
   });
 
+  it('addTempHp uses ints', () => {
+    let charHealth = new CharacterHealth();
+    charHealth.tempHp = 2;
+    when(
+      mockedCharacterHealthServiceClass.getCharacterHealth('Briv')
+    ).thenReturn(charHealth);
+
+    var result = service.addTempHp('Briv', 9.9);
+
+    assert.equal(9, result.tempHp);
+  });
+
   it('calculateDamage applies immunity', () => {
     const damage: Array<DamageRequest> = [
       {
@@ -111,6 +123,29 @@ describe('CharacterManager', () => {
       {
         type: DamageType.Slashing,
         value: 10,
+      },
+    ];
+    const defense: Array<Defense> = [
+      {
+        defense: DefenseType.Immunity,
+        type: DamageType.Acid,
+      },
+    ];
+
+    const result = service.calculateDamage(damage, defense);
+
+    assert.equal(16, result);
+  });
+
+  it('calculateDamage uses ints', () => {
+    const damage: Array<DamageRequest> = [
+      {
+        type: DamageType.Cold,
+        value: 6.1,
+      },
+      {
+        type: DamageType.Slashing,
+        value: 10.9999999,
       },
     ];
     const defense: Array<Defense> = [
@@ -258,6 +293,20 @@ describe('CharacterManager', () => {
     assert.equal(25, result.currentHp);
   });
 
+  it('applyDamage uses ints', () => {
+    const health: CharacterHealth = {
+      currentHp: 30,
+      maxHp: 30,
+      tempHp: 5,
+      name: 'Test',
+    };
+
+    const result = service.applyDamage(11.9999999, health);
+
+    assert.equal(0, result.tempHp);
+    assert.equal(24, result.currentHp);
+  });
+
   it('applyDamage temp hp exceeds damage', () => {
     const health: CharacterHealth = {
       currentHp: 30,
@@ -370,5 +419,40 @@ describe('CharacterManager', () => {
 
     verify(mockedCharacterHealthServiceClass.save(anything())).times(0);
     assert.equal(originalHealth.currentHp, result.currentHp);
+  });
+
+  it('dealDamage uses ints', () => {
+    // for purposes of this demo, we'll use the
+    // live version of the Character Service to load
+    // json data for Briv
+    service = new CharacterManager(
+      new CharacterService(),
+      mockedCharacterHealthServiceInstance
+    );
+    const originalHealth: CharacterHealth = {
+      name: 'Briv',
+      maxHp: 45,
+      currentHp: 45,
+      tempHp: 0,
+    };
+    const damage: Array<DamageRequest> = [
+      {
+        type: DamageType.Cold,
+        value: 6.9234234234234234,
+      },
+      {
+        type: DamageType.Slashing,
+        value: 10.2123123123123123,
+      },
+    ];
+
+    when(
+      mockedCharacterHealthServiceClass.getCharacterHealth('Briv')
+    ).thenReturn(originalHealth);
+
+    var result = service.dealDamage('Briv', damage);
+
+    verify(mockedCharacterHealthServiceClass.save(anything())).times(1);
+    assert.equal(34, result.currentHp);
   });
 });

@@ -5,6 +5,8 @@ import { ICharacterService } from './services/character.service';
 import { ICharacterHealthService } from './services/character-health.service';
 import { CharacterHealth } from '../../models/character-health';
 import { DamageRequest } from '../../models/damage-request';
+import { DefenseType } from '../../models/enums';
+import { Calculations } from '../../shared/calculations';
 
 export interface ICharacterManager {
   /**
@@ -80,7 +82,7 @@ export class CharacterManager implements ICharacterManager {
    * @param amount Amount of temporary HP to add. (Negative numbers allowed)
    */
   addTempHp(name: string, amount: number): CharacterHealth {
-    var health = this.getCharacterHealth(name);
+    let health = this.getCharacterHealth(name);
     let newTempHp = 0;
     amount = this.getInt(amount);
 
@@ -134,7 +136,7 @@ export class CharacterManager implements ICharacterManager {
       return null; // TODO - This could be an exception that turns into a 404
     }
 
-    var maxHp = this.characterService.calculateMaxHp(character);
+    let maxHp = this.characterService.calculateMaxHp(character);
     currentHealth = {
       name: character.name,
       maxHp: maxHp,
@@ -153,17 +155,21 @@ export class CharacterManager implements ICharacterManager {
    * @param damage Array of damage types and amount of damage to deal
    */
   dealDamage(name: string, damage: Array<DamageRequest>): CharacterHealth {
-    throw new Error('Method not implemented.');
-    // var originalHealth = GetCharacterHealth(name);
-    // // GetCharacterHealth has null checks for character, so we can assume character is not null
-    // var character = _characterService.GetCharacter(name);
-    // var damageTaken = CalculateDamage(damageRequest, character.Defenses);
-    // if (damageTaken == 0) {
-    //   return originalHealth;
-    // }
-    // var updatedHealth = ApplyDamage(damageTaken, originalHealth);
-    // _characterHealthService.Save(updatedHealth);
-    // return updatedHealth;
+    let originalHealth = this.getCharacterHealth(name);
+    if (originalHealth === null) {
+      // getCharacterHealth must have a matching character or it will return null
+      throw new Error('Character not found');
+    }
+
+    let character = this.characterService.getByName(name);
+    let damageTaken = this.calculateDamage(damage, character.defenses);
+    if (damageTaken === 0) {
+      return originalHealth;
+    }
+
+    let updatedHealth = this.applyDamage(damageTaken, originalHealth);
+    this.characterHealthService.save(updatedHealth);
+    return updatedHealth;
   }
 
   /**
@@ -176,7 +182,68 @@ export class CharacterManager implements ICharacterManager {
     damageRequest: Array<DamageRequest>,
     defenses: Array<Defense>
   ): number {
-    throw new Error('Method not implemented.');
+    if (!damageRequest || damageRequest.length === 0) {
+      return 0;
+    }
+    if (!defenses) {
+      defenses = new Array<Defense>();
+    }
+    let damageTaken = 0;
+
+    damageRequest.forEach((damage) => {
+      // Not allowing negative damage. Could consider throwing an error.
+      let damageToApply = Math.max(0, this.getInt(damage.value));
+
+      // This if check could also check to see if no defenses match the damage type and apply all damage,
+      // but that wouldn't handle the addition / subtraction portion down the road since it won't
+      // necessarily be damage type specific (eg reduce all damage by 5)
+      if (defenses.length === 0) {
+        damageTaken += damageToApply;
+        return; // continue
+      }
+
+      // immunity
+      if (
+        defenses.some(
+          (defense) =>
+            defense.defense === DefenseType.Immunity &&
+            defense.type === damage.type
+        )
+      ) {
+        return; // continue
+      }
+
+      let currentDamage = damageToApply;
+
+      // apply any addition / subtraction
+      // assumed this is out of scope for demo based on defense model
+
+      // allow one resistance
+      if (
+        defenses.some(
+          (defense) =>
+            defense.defense === DefenseType.Resistance &&
+            defense.type === damage.type
+        )
+      ) {
+        currentDamage = Calculations.halfRoundDown(currentDamage);
+      }
+
+      // allow one vulnerability
+      if (
+        defenses.some(
+          (defense) =>
+            defense.defense === DefenseType.Vulnerability &&
+            defense.type == damage.type
+        )
+      ) {
+        currentDamage *= 2;
+      }
+
+      damageTaken += currentDamage;
+    });
+
+    return damageTaken;
   }
 
   /**
@@ -189,7 +256,33 @@ export class CharacterManager implements ICharacterManager {
     damage: number,
     originalHealth: CharacterHealth
   ): CharacterHealth {
-    throw new Error('Method not implemented.');
+    damage = this.getInt(damage);
+    if (damage <= 0) {
+      // Not allowing negative damage. Could consider throwing an error.
+      return originalHealth;
+    }
+    let updatedHealth = { ...originalHealth };
+    let remainingDamage = damage;
+
+    // the if checks aren't strictly necessary since the math.min would handle 0
+    // but they help describe the intent.
+
+    if (updatedHealth.tempHp > 0) {
+      let tempDamage = Math.min(updatedHealth.tempHp, remainingDamage);
+      updatedHealth.tempHp -= tempDamage;
+      remainingDamage -= tempDamage;
+    }
+
+    if (remainingDamage > 0) {
+      let hpDamage = Math.min(updatedHealth.currentHp, remainingDamage);
+      updatedHealth.currentHp -= hpDamage;
+      remainingDamage -= hpDamage;
+
+      // if CurrentHp <= 0, character is unconscious
+      // if remainingDamage >= MaxHp, character is killed
+    }
+
+    return updatedHealth;
   }
 
   /**

@@ -31,7 +31,7 @@ export class Item {
 
 export class Defense {
   type: DamageType;
-  defenseType: DefenseType;
+  defense: DefenseType;
 }
 
 export class Modifier {

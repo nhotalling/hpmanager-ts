@@ -20,7 +20,7 @@ export class CharacterRoutes {
     });
 
     /**
-     * Shows a character's current HP, maximum HP, and temporary HP.
+     * Gets a character's current HP, maximum HP, and temporary HP.
      */
     app
       .route('/api/v1/character/:name/status')
@@ -41,6 +41,19 @@ export class CharacterRoutes {
         const name = req.params.name;
         const value = +req.query.value;
         const health = characterManager.addTempHp(name, value);
+        res.status(200).send(health);
+      });
+
+    /**
+     * Deals damage to the specified character, taking into account the character's damage
+     * immunity, vulnerability, and resistance.
+     */
+    app
+      .route('/api/v1/character/:name/damage')
+      .put((req: Request, res: Response) => {
+        const name = req.params.name;
+        const damageRequest = req.body;
+        const health = characterManager.dealDamage(name, damageRequest);
         res.status(200).send(health);
       });
   }

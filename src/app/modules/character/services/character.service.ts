@@ -31,14 +31,14 @@ export class CharacterService implements ICharacterService {
       throw new Error('Characters should include 1 or more classes');
     }
 
-    var hp = 0;
+    let hp = 0;
 
     // Determine CON bonus to apply at every level
-    var conBonus = this.calculateStatBonus(character, StatType.Constitution);
+    let conBonus = this.calculateStatBonus(character, StatType.Constitution);
 
-    var isFirstLevel = true;
+    let isFirstLevel = true;
     character.classes.forEach((charClass) => {
-      var classLevels = charClass.classLevel;
+      let classLevels = charClass.classLevel;
       if (isFirstLevel) {
         // Get first level HP (max)
         // Improvement - Add an boolean to the CharacterClass that indicates if the class was the starting class.

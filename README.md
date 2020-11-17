@@ -99,6 +99,7 @@ Other damage notes:
 
 ## Misc Notes, Areas for Improvement
 
+- Error handling - App currently returns html error message. Needs better global error handling to return an appropriate json error that does not expose sensitive information.
 - Enums - Some properties such as damage types, and defense types (vulnerability, etc) were made into enums to
   assist with strongly typing things. However, it could be argued this reduces flexibility
   in the event new types are introduced, so those properties could be easily changed back to strings.

@@ -109,4 +109,4 @@ Other damage notes:
 - Damage endpoint could check for excessive damage (character HP max) that causes character death.
 - Add considerations for magic/nonmagic damage.
 - Add considerations for defense allowing damage modifiers (eg reduce all damage by 5).
-- Add Swagger
+- Add Swagger. Ensure endpoints and params are marked up appropriately to display messages in Swagger.
